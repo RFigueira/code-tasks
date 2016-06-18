@@ -1,3 +1,7 @@
+<?php
+  $params = $this->getParams();
+  $pessoa = $params['pessoa'];
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -31,11 +35,8 @@
     <![endif]-->
 
 </head>
-
 <body>
-
     <div id="wrapper">
-
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -50,7 +51,6 @@
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
-                
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> Tainã Milano <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -100,9 +100,7 @@
             </div>
             <!-- /.navbar-collapse -->
         </nav>
-
         <div id="page-wrapper">
-
             <div class="container-fluid">
 
                 <!-- Page Heading -->
@@ -226,7 +224,8 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel"> Cadastro</h4>
                         </div>
-                        <div class="modal-body">
+                        <form method="post">
+                          <div class="modal-body">
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label>Nome</label>
@@ -234,12 +233,12 @@
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-user"></i>
                                             </button>
-                                        </span>  
-                                        <input type="text" class="form-control">                                      
+                                        </span>
+                                        <input type="text" class="form-control" name="txt-nome"
+                                               value="<?php echo $pessoa->__get(nome) ?>">
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-lg-12">
                                     <label>E-mail</label>
@@ -248,11 +247,11 @@
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-envelope"></i>
                                             </button>
                                         </span>
-                                        <input type="text" class="form-control">
+                                        <input type="text" class="form-control" name="txt-email"
+                                               value="<?php echo $pessoa->__get(email) ?>">
                                     </div>
                                 </div>
                             </div>
-
                             <div class="row">
                                 <div class="col-lg-6">
                                     <label>Senha</label>
@@ -261,7 +260,8 @@
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-asterisk"></i>
                                             </button>
                                         </span>
-                                        <input type="password" class="form-control">
+                                        <input type="password" class="form-control" name="txt-senha"
+                                               value="<?php echo $pessoa->__get(senha)?>">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -275,25 +275,29 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary"><i class="glyphicon glyphicon-ok"></i> Salvar</button>
-                        </div>
+                          </div>
+                          <div class="modal-footer">
+                            <input type="hidden" name="controle" value="PessoaController"/>
+                            <input type="hidden" name="acao" value="savePessoa"/>
+                            <input type="hidden" name="id" value="<?php echo $pessoa->__get(id)?>" />
+                            <button type="button" class="btn btn-primary" type="submit">
+                                <i class="glyphicon glyphicon-ok"></i>
+                                Salvar
+                            </button>
+                          </div>
+
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
         <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
-
     <!-- jQuery -->
     <script src="outros/startbootstrap-sb-admin-1.0.4/js/jquery.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="outros/startbootstrap-sb-admin-1.0.4/js/bootstrap.min.js"></script>
-
 </body>
 
 </html>
