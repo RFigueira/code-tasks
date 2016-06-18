@@ -23,14 +23,6 @@ class Pessoa extends Connection
       $this->$chave = $valor;
   }
 
-  public function save (){
-
-    if(is_null($id)){
-      $st_query = "INSERT INTO pessoa(id,nome,email,senha,perfil)
-                      VALUES('$nome','$senha','$email','$perfil');";
-    }
-      $this->pdo->lastInsertId();
-  }
 }
 
 ?>
