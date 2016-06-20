@@ -50,7 +50,7 @@
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
-                
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> Tainã Milano <b class="caret"></b></a>
                     <ul class="dropdown-menu">
@@ -121,6 +121,10 @@
                             </li>
                         </ol>
                     </div>
+
+                    <?php
+                    echo "This is PHP";
+                    ?>
                 </div>
                 <!-- /.row -->
 
