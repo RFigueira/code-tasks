@@ -3,7 +3,7 @@
 /**
  *
  */
-abstract class Connection
+abstract class AbstractConnection
 {
 
   private $pdo;

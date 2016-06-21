@@ -46,7 +46,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">codePampa</a>
+                <a class="navbar-brand" href="index.php">codePampa</a>
             </div>
             <!-- Top Menu Items -->
             <ul class="nav navbar-right top-nav">
@@ -68,10 +68,10 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
-                        <a href="index.html"><i class="glyphicon glyphicon-dashboard"></i> Dashboard</a>
+                        <a href="index.php"><i class="glyphicon glyphicon-dashboard"></i> Dashboard</a>
                     </li>
                     <li>
-                        <a href="manterPessoas.html"><i class="glyphicon glyphicon-user"></i> Pessoas</a>
+                        <a href="manterPessoas.php"><i class="glyphicon glyphicon-user"></i> Pessoas</a>
                     </li>
                     <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#projetos">
@@ -79,7 +79,7 @@
                         </a>
                         <ul id="projetos" class="collapse">
                             <li>
-                                <a href="manterProjetos.html"><i class="glyphicon glyphicon-plus"></i> Novo projeto</a>
+                                <a href="manterProjetos.php"><i class="glyphicon glyphicon-plus"></i> Novo projeto</a>
                             </li>
                             <li>
                                 <a href="javascript:;" data-toggle="collapse" data-target="#tarefas">
@@ -114,7 +114,7 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-dashboard"></i>  <a href="index.html">Dashboard</a>
+                                <i class="fa fa-dashboard"></i>  <a href="index.php">Dashboard</a>
                             </li>
                             <li class="active">
                                 <i class="fa fa-file"></i> Blank Page

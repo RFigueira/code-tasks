@@ -1,7 +1,7 @@
 <?php
 
 
-class Pessoa extends Connection
+class Pessoa
 {
 
   private $id;
