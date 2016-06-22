@@ -1,3 +1,49 @@
+<?php
+setlocale(LC_CTYPE, 'ptb', 'BR', 'pt_BR', 'Portuguese_Brazil.1252');
+date_default_timezone_set('America/Sao_Paulo');
+ini_set('default_charset', 'UTF-8');
+ini_set('display_errors', true);
+//error_reporting(E_ERROR | E_WARNING);
+error_reporting(E_ALL);
+
+  require_once '../service/PessoaService.class.php';
+  require_once '../model/Pessoa.class.php';
+
+  $msg = 'a';
+  $pessoaService = new PessoaService;
+  $pessoa = new Pessoa();
+
+
+
+  if(isset($_POST["txt-nome"])  ||
+     isset($_POST["txt-senha"]) ||
+     isset($_POST["txt-email"]) ||
+     isset($_POST["txt-senha-confirmacao"])) {
+
+       $pessoa->nome = $_POST["txt-nome"];
+       $pessoa->senha = $_POST["txt-senha"];
+       $pessoa->email = $_POST["txt-email"];
+       $pessoa->ativo = 't';
+
+  if($pessoa->nome == null ||  $pessoa->nome == '') {
+    $msg .= "Nome é Obrigatorio!";
+  }
+  if($pessoa->email == null ||  $pessoa->nome == '') {
+    $msg .= "Nome é Obrigatorio!";
+  }
+  if($pessoa->nome == null ||  $pessoa->nome == '') {
+    $msg .= "Nome é Obrigatorio!";
+  }
+
+  if($msg == null){
+    $pessoaService->save($pessoa);
+  }
+}
+  $pessoas = $pessoaService->find(null, null);
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -107,6 +153,13 @@
                         </h1>
                     </div>
                 </div>
+                <?php
+                  if($msg == null){?>
+                    <div class="bs-callout bs-callout-info" id="callout-modal-youtube">
+                      <h3>Sucesso!</h3>
+                    </div>
+                <?php  }
+                ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="col-lg-6">
@@ -118,8 +171,6 @@
                                     <input type="text" class="form-control">
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
-                                        </button>
-                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -140,54 +191,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Patric Dutra</td>
-                                        <td>patric.dutra@codepampa.com.br</td>
+                                  <?php
+                                  foreach ($pessoas as $obj) {
+                                  ?>
+                                <tr>
+                                        <td><?php $obj->id ?></td>
+                                        <td><?php $obj->nome ?></td>
+                                        <td><?php $obj->email ?></td>
                                         <td>
                                             <div class="checkbox">
-                                                <label>
-                                                    <input value="" type="checkbox">
-                                                </label>
+                                            </label>
                                             </div>
                                         </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i> Editar</button>
                                             <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Rodrigo Freitas</td>
-                                        <td>rodrigo.freitas@codepampa.com.br</td>
-                                        <td>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input value="" type="checkbox">
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i> Editar</button>
-                                            <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Tainã Milano</td>
-                                        <td>taina.milano@codepampa.com.br</td>
-                                        <td>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input value="" type="checkbox">
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i> Editar</button>
-                                            <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
-                                        </td>
-                                    </tr>
+                                    <?php
+                                  }
+                                    ?>
                                 </tbody>
                             </table>
                         </div>
@@ -196,17 +217,14 @@
                     <!-- /.panel-body -->
                     <div class="row">
                         <div class="col-lg-offset-8 ">
-                            <div id="dataTables-example_paginate" class="dataTables_paginate paging_simple_numbers">
-                                <ul class="pagination">
-                                    <li id="dataTables-example_previous" tabindex="0" aria-controls="dataTables-example" class="paginate_button previous disabled"><a href="#">Previous</a></li>
-                                    <li tabindex="0" aria-controls="dataTables-example" class="paginate_button active"><a href="#">1</a></li>
-                                    <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">2</a></li>
-                                    <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">3</a></li><li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">4</a></li>
-                                    <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">5</a></li>
-                                    <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">6</a></li>
-                                    <li id="dataTables-example_next" tabindex="0" aria-controls="dataTables-example" class="paginate_button next"><a href="#">Next</a></li>
-                                </ul>
-                            </div>
+                          <ul class="pagination">
+                              <li tabindex="0" aria-controls="dataTables-example" class="paginate_button active"><a href="#">1</a></li>
+                              <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">2</a></li>
+                              <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">3</a></li><li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">4</a></li>
+                              <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">5</a></li>
+                              <li tabindex="0" aria-controls="dataTables-example" class="paginate_button "><a href="#">6</a></li>
+                              <li id="dataTables-example_next" tabindex="0" aria-controls="dataTables-example" class="paginate_button next"><a href="#">Next</a></li>
+                          </ul>
                         </div>
                     </div>
                 </div>
@@ -220,7 +238,7 @@
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel"> Cadastro</h4>
                         </div>
-                        <form method="post" action="manterPessoa">
+                        <form data-toggle="validator" method="post" action="manterPessoa.php">
                           <div class="modal-body">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -230,21 +248,14 @@
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-user"></i>
                                             </button>
                                         </span>
-                                        <input type="text" class="form-control" name="txt-nome"
-                                               value=" ">
+                                        <input type="text" class="form-control" name="txt-nome" required>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <label>E-mail</label>
                                     <div class="form-group input-group">
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-envelope"></i>
                                             </button>
                                         </span>
-                                        <input type="text" class="form-control" name="txt-email"
-                                               value=" ">
+                                        <input type="text" class="form-control" name="txt-email" required>
                                     </div>
                                 </div>
                             </div>
@@ -256,8 +267,7 @@
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-asterisk"></i>
                                             </button>
                                         </span>
-                                        <input type="password" class="form-control" name="txt-senha"
-                                               value=" ">
+                                        <input type="password" class="form-control" name="txt-senha" required>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -267,13 +277,13 @@
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-asterisk"></i>
                                             </button>
                                         </span>
-                                        <input type="password" class="form-control">
+                                        <input type="password" class="form-control" name="txt-senha-confirmacao" required>
                                     </div>
                                 </div>
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" type="submit">
+                            <button type="button" class="btn btn-primary"  name="salvar" type="submit">
                                 <i class="glyphicon glyphicon-ok"></i>
                                 Salvar
                             </button>

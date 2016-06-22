@@ -1,18 +1,16 @@
 <?php
 
 
-class Pessoa
-{
+class Pessoa {
 
   private $id;
   private $nome;
   private $senha;
   private $email;
-  private $perfil
+  private $perfil;
+  private $ativo;
 
-  public function __construct(){
-    parent::__construct();
-
+  public function __construct() {
   }
 
   public function __get($chave){

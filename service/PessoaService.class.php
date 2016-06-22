@@ -1,6 +1,6 @@
 <?php
 
-require 'AbstractConnection.class.php';
+require_once 'AbstractConnection.class.php';
 
 class PessoaService extends AbstractConnection {
 
@@ -12,10 +12,11 @@ class PessoaService extends AbstractConnection {
     $parametros =  array(':nome' => $pessoa->nome,
                          ':email' => $pessoa->email,
                          ':senha' => $pessoa->senha,
-                         ':perfil' => $pessoa->perfil);
+                         ':perfil' => $pessoa->perfil,
+                         ':ativo' => $pessoa->ativo);
 
-    $sql = "INSERT INTO pessoa (nome, email, senha, perfil) ".
-           " VALUES (:nome, :email, :senha, :perfil)";
+    $sql = "INSERT INTO pessoa (nome, email, senha, perfil, ativo) ".
+           " VALUES (:nome, :email, :senha, :perfil, :ativo)";
     $retorno = $this->pdo->prepare($sql);
     $retorno->execute($parametros);
 
@@ -34,7 +35,7 @@ class PessoaService extends AbstractConnection {
           $sql .= " ORDER BY ".$orderBy;
       }
       $lista = array();
-      $query = $this->pdo->prepare($sql);
+      $query = $this->getPDO()->prepare($sql);
 
       $query->execute($parametros);
       while ($obj = $query->fetchObject()) {
