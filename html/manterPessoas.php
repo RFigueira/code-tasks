@@ -123,7 +123,7 @@ error_reporting(E_ALL);
                         <a href="javascript:;" data-toggle="collapse" data-target="#projetos">
                             <i class="glyphicon glyphicon-folder-open"></i> Projetos <i class="glyphicon glyphicon-chevron-down"></i>
                         </a>
-                        <ul id="projetos" class="collapse">
+                        <ul id="projetos" class="nav nav-second-level collapse">
                             <li>
                                 <a href="manterProjetos.php"><i class="glyphicon glyphicon-plus"></i> Novo projeto</a>
                             </li>
@@ -131,12 +131,12 @@ error_reporting(E_ALL);
                                 <a href="javascript:;" data-toggle="collapse" data-target="#tarefas">
                                     <i class="glyphicon glyphicon-th-list"></i> Projeto 1 <i class="glyphicon glyphicon-chevron-down"></i>
                                 </a>
-                                <ul id="tarefas" class="collapse nav ml-30">
+                                <ul id="tarefas" class="nav nav-third-level collapse">
                                     <li>
-                                        <a href="#"><i class="glyphicon glyphicon-minus "></i> Tarefa 1</a>
+                                        <a href="manterTarefas.html"><i class="glyphicon glyphicon-minus ml-15"></i> Tarefa 1</a>
                                     </li>
                                     <li>
-                                        <a href="#"><i class="glyphicon glyphicon-minus "></i> Tarefa 2</a>
+                                        <a href="#"><i class="glyphicon glyphicon-minus ml-15"></i> Tarefa 2</a>
                                     </li>
                                 </ul>
                             </li>
@@ -191,7 +191,7 @@ error_reporting(E_ALL);
                                         <th>Nome</th>
                                         <th>E-mail</th>
                                         <th>Ativo</th>
-                                        <th ></th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -211,10 +211,58 @@ error_reporting(E_ALL);
                                                 Sim
                                             </div>
                                         </td>
+<<<<<<< HEAD
                                         <td>
                                             <a href="manterPessoas.php?id=<?php echo $obj->id?>nome=<?php echo $obj->nome?>"  type="button" class="btn btn-danger">
                                               <i class="glyphicon glyphicon-trash"></i> Excluir
                                             </button>
+=======
+<<<<<<< HEAD:html/manterPessoas.html
+                                        <td>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-success "><i class="glyphicon glyphicon-edit"></i> Editar</button>
+                                                <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>Rodrigo Freitas</td>
+                                        <td>rodrigo.freitas@codepampa.com.br</td>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input value="" type="checkbox">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-success "><i class="glyphicon glyphicon-edit"></i> Editar</button>
+                                                <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>Tainã Milano</td>
+                                        <td>taina.milano@codepampa.com.br</td>
+                                        <td>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input value="" type="checkbox">
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-success "><i class="glyphicon glyphicon-edit"></i> Editar</button>
+                                                <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
+                                            </div>
+=======
+                                            <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
+>>>>>>> 2248a23445bec9c4e6f3ec7e5986cefea14bf6e2:html/manterPessoas.php
+>>>>>>> b0e3d6874b748b16d41079bb6de9b94d820b674a
                                         </td>
                                     </tr>
                                     <?php

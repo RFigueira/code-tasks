@@ -24,6 +24,16 @@
 	margin-left: 15px;
 }
 
+.mr-15
+{
+    margin-right: 30px;
+}
+
+.mt-15
+{
+    margin-top: 15px;
+}
+
 .filtro-busca
 {
 	max-width: 300px;
@@ -56,4 +66,13 @@
     width: 49%;
     display: inline-block;
 }
+
+.align-bottom-and-rigth
+{
+    position: absolute;
+    bottom: 15px;
+    right: 0px;
+}
+
+
 
