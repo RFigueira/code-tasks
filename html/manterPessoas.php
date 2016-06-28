@@ -3,17 +3,30 @@ setlocale(LC_CTYPE, 'ptb', 'BR', 'pt_BR', 'Portuguese_Brazil.1252');
 date_default_timezone_set('America/Sao_Paulo');
 ini_set('default_charset', 'UTF-8');
 ini_set('display_errors', true);
-//error_reporting(E_ERROR | E_WARNING);
+error_reporting(E_ERROR | E_WARNING);
 error_reporting(E_ALL);
 
   require_once '../service/PessoaService.class.php';
   require_once '../model/Pessoa.class.php';
 
-  $msg = 'a';
+//
+
+
+
+  $msg = '';
   $pessoaService = new PessoaService;
   $pessoa = new Pessoa();
 
+  if(isset($_GET["id"])) {
+    if(isset($_GET["nome"])) {
 
+    }
+    else {
+      $pessoa = $pessoaService->findById($_GET["id"]);
+      //echo 'data-toggle="modal" data-target="#myModal"';
+    }
+  }
+  else {
 
   if(isset($_POST["txt-nome"])  ||
      isset($_POST["txt-senha"]) ||
@@ -23,20 +36,12 @@ error_reporting(E_ALL);
        $pessoa->nome = $_POST["txt-nome"];
        $pessoa->senha = $_POST["txt-senha"];
        $pessoa->email = $_POST["txt-email"];
+       $pessoa->perfil = 'ALUNO';
        $pessoa->ativo = 't';
 
-  if($pessoa->nome == null ||  $pessoa->nome == '') {
-    $msg .= "Nome é Obrigatorio!";
-  }
-  if($pessoa->email == null ||  $pessoa->nome == '') {
-    $msg .= "Nome é Obrigatorio!";
-  }
-  if($pessoa->nome == null ||  $pessoa->nome == '') {
-    $msg .= "Nome é Obrigatorio!";
-  }
-
-  if($msg == null){
-    $pessoaService->save($pessoa);
+    if($msg == null){
+      $pessoaService->save($pessoa);
+    }
   }
 }
   $pessoas = $pessoaService->find(null, null);
@@ -75,7 +80,6 @@ error_reporting(E_ALL);
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
 <body>
     <div id="wrapper">
@@ -154,7 +158,7 @@ error_reporting(E_ALL);
                     </div>
                 </div>
                 <?php
-                  if($msg == null){?>
+                  if($msg == 10){?>
                     <div class="bs-callout bs-callout-info" id="callout-modal-youtube">
                       <h3>Sucesso!</h3>
                     </div>
@@ -163,15 +167,15 @@ error_reporting(E_ALL);
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="col-lg-6">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
+                            <button onclick="<?php $pessoa = new Pessoa();?>" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
                         </div>
                         <div class="col-lg-6">
                             <div class="col-lg-offset-6">
-                                <div class="form-group input-group">
-                                    <input type="text" class="form-control">
+                              <div class="form-group input-group">
+                                  <input type="text" class="form-control">
                                     <span class="input-group-btn">
-                                        <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
-                                </div>
+                                      <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-search"></i>
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -194,16 +198,23 @@ error_reporting(E_ALL);
                                   <?php
                                   foreach ($pessoas as $obj) {
                                   ?>
-                                <tr>
-                                        <td><?php $obj->id ?></td>
-                                        <td><?php $obj->nome ?></td>
-                                        <td><?php $obj->email ?></td>
+                                  <tr>
+                                        <td><?php echo $obj->id?></td>
+                                        <td>
+                                            <a  href="manterPessoas.php?id=<?php echo $obj->id?>">
+                                                <?php echo $obj->nome?>
+                                            </a>
+                                        </td>
+                                        <td><?php echo $obj->email?></td>
                                         <td>
                                             <div class="checkbox">
-                                            </label>
+                                                Sim
                                             </div>
                                         </td>
-                                            <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
+                                        <td>
+                                            <a href="manterPessoas.php?id=<?php echo $obj->id?>nome=<?php echo $obj->nome?>"  type="button" class="btn btn-danger">
+                                              <i class="glyphicon glyphicon-trash"></i> Excluir
+                                            </button>
                                         </td>
                                     </tr>
                                     <?php
@@ -238,7 +249,7 @@ error_reporting(E_ALL);
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel"> Cadastro</h4>
                         </div>
-                        <form data-toggle="validator" method="post" action="manterPessoa.php">
+                        <form method="post" action="manterPessoa.php">
                           <div class="modal-body">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -248,14 +259,14 @@ error_reporting(E_ALL);
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-user"></i>
                                             </button>
                                         </span>
-                                        <input type="text" class="form-control" name="txt-nome" required>
+                                        <input type="text" class="form-control" name="txt-nome" value="<?php echo $pessoa->nome?>" >
                                     </div>
                                     <div class="form-group input-group">
                                         <span class="input-group-btn">
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-envelope"></i>
                                             </button>
                                         </span>
-                                        <input type="text" class="form-control" name="txt-email" required>
+                                        <input type="text" class="form-control" name="txt-email" value="<?php echo $pessoa->email?>" >
                                     </div>
                                 </div>
                             </div>
@@ -267,7 +278,7 @@ error_reporting(E_ALL);
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-asterisk"></i>
                                             </button>
                                         </span>
-                                        <input type="password" class="form-control" name="txt-senha" required>
+                                        <input type="password" class="form-control" name="txt-senha" value="<?php echo $pessoa->senha?>" >
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
@@ -277,7 +288,7 @@ error_reporting(E_ALL);
                                             <button class="btn btn-default" type="button"><i class="glyphicon glyphicon-asterisk"></i>
                                             </button>
                                         </span>
-                                        <input type="password" class="form-control" name="txt-senha-confirmacao" required>
+                                        <input type="password" class="form-control" name="txt-senha-confirmacao" >
                                     </div>
                                 </div>
                             </div>

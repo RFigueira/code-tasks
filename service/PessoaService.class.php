@@ -1,6 +1,6 @@
 <?php
 
-require_once 'AbstractConnection.class.php';
+require 'AbstractConnection.class.php';
 
 class PessoaService extends AbstractConnection {
 
@@ -43,6 +43,22 @@ class PessoaService extends AbstractConnection {
       }
       return $lista;
   }
+
+  public function findById($id) {
+    $sql = "SELECT * FROM pessoa WHERE id=:id";
+    $retorno = $this->getPDO()->prepare($sql);
+    $retorno->bindParam(":id", $id);
+    $retorno->execute();
+    if($obj = $retorno->fetchObject())
+    {
+        return $obj;
+    }
+    else
+    {
+        return null;
+    }
+
+}
 
 }
 
