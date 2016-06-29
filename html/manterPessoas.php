@@ -14,25 +14,26 @@ error_reporting(E_ALL);
 
 
   $msg = '';
+  $teste ='';
   $pessoaService = new PessoaService;
   $pessoa = new Pessoa();
 
   if(isset($_GET["id"])) {
     if(isset($_GET["nome"])) {
-
+      $pessoa = $pessoaService->findById($_GET["id"]);
     }
     else {
-      $pessoa = $pessoaService->findById($_GET["id"]);
-      //echo 'data-toggle="modal" data-target="#myModal"';
+      $pessoaService->delete($_GET["id"]);
+      header("location: manterPessoas.php");
     }
   }
   else {
-
   if(isset($_POST["txt-nome"])  ||
      isset($_POST["txt-senha"]) ||
      isset($_POST["txt-email"]) ||
      isset($_POST["txt-senha-confirmacao"])) {
 
+       $pessoa->id = $_POST["txt-id"];
        $pessoa->nome = $_POST["txt-nome"];
        $pessoa->senha = $_POST["txt-senha"];
        $pessoa->email = $_POST["txt-email"];
@@ -40,12 +41,11 @@ error_reporting(E_ALL);
        $pessoa->ativo = 't';
 
     if($msg == null){
-      $pessoaService->save($pessoa);
+      $pessoaService->salvar($pessoa);
     }
   }
 }
   $pessoas = $pessoaService->find(null, null);
-
 
 ?>
 
@@ -82,6 +82,7 @@ error_reporting(E_ALL);
     <![endif]-->
 </head>
 <body>
+
     <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -148,7 +149,6 @@ error_reporting(E_ALL);
         </nav>
         <div id="page-wrapper">
             <div class="container-fluid">
-
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
@@ -157,17 +157,15 @@ error_reporting(E_ALL);
                         </h1>
                     </div>
                 </div>
-                <?php
-                  if($msg == 10){?>
+                <?php if($msg == 10) {?>
                     <div class="bs-callout bs-callout-info" id="callout-modal-youtube">
                       <h3>Sucesso!</h3>
                     </div>
-                <?php  }
-                ?>
+                <?php  } ?>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="col-lg-6">
-                            <button onclick="<?php $pessoa = new Pessoa();?>" type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
+                            <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"><i class="glyphicon glyphicon-check"></i> Novo cadastro</button>
                         </div>
                         <div class="col-lg-6">
                             <div class="col-lg-offset-6">
@@ -195,79 +193,27 @@ error_reporting(E_ALL);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                  <?php
-                                  foreach ($pessoas as $obj) {
-                                  ?>
+                                  <?php foreach ($pessoas as $obj) { ?>
                                   <tr>
                                         <td><?php echo $obj->id?></td>
-                                        <td>
-                                            <a  href="manterPessoas.php?id=<?php echo $obj->id?>">
-                                                <?php echo $obj->nome?>
-                                            </a>
-                                        </td>
+                                        <td><?php echo $obj->nome?></td>
                                         <td><?php echo $obj->email?></td>
-                                        <td>
-                                            <div class="checkbox">
-                                                Sim
-                                            </div>
-                                        </td>
-<<<<<<< HEAD
-                                        <td>
-                                            <a href="manterPessoas.php?id=<?php echo $obj->id?>nome=<?php echo $obj->nome?>"  type="button" class="btn btn-danger">
-                                              <i class="glyphicon glyphicon-trash"></i> Excluir
-                                            </button>
-=======
-<<<<<<< HEAD:html/manterPessoas.html
+                                        <td><?php echo 'Sim'?></td>
                                         <td>
                                             <div class="pull-right">
-                                                <button type="button" class="btn btn-success "><i class="glyphicon glyphicon-edit"></i> Editar</button>
-                                                <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
+                                                <a href="manterPessoas.php?id=<?php echo $obj->id?>&nome=<?php echo $obj->nome?>"
+                                                  type="button" class="btn btn-success">
+                                                    <i class="glyphicon glyphicon-edit"></i>
+                                                    Editar
+                                                </a>
+                                                <a href="manterPessoas.php?id=<?php echo $obj->id?>" type="button" class="btn btn-danger">
+                                                  <i class="glyphicon glyphicon-trash"></i>
+                                                  Excluir
+                                                </a>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Rodrigo Freitas</td>
-                                        <td>rodrigo.freitas@codepampa.com.br</td>
-                                        <td>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input value="" type="checkbox">
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="pull-right">
-                                                <button type="button" class="btn btn-success "><i class="glyphicon glyphicon-edit"></i> Editar</button>
-                                                <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Tainã Milano</td>
-                                        <td>taina.milano@codepampa.com.br</td>
-                                        <td>
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input value="" type="checkbox">
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="pull-right">
-                                                <button type="button" class="btn btn-success "><i class="glyphicon glyphicon-edit"></i> Editar</button>
-                                                <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
-                                            </div>
-=======
-                                            <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
->>>>>>> 2248a23445bec9c4e6f3ec7e5986cefea14bf6e2:html/manterPessoas.php
->>>>>>> b0e3d6874b748b16d41079bb6de9b94d820b674a
-                                        </td>
-                                    </tr>
-                                    <?php
-                                  }
-                                    ?>
+                                    <?php } ?>
                                 </tbody>
                             </table>
                         </div>
@@ -297,7 +243,8 @@ error_reporting(E_ALL);
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                             <h4 class="modal-title" id="myModalLabel"> Cadastro</h4>
                         </div>
-                        <form method="post" action="manterPessoa.php">
+                        <form action="manterPessoas.php" method="post">
+                          <input type="hidden" name="txt-id" value="<?php echo $pessoa->id ?>" />
                           <div class="modal-body">
                             <div class="row">
                                 <div class="col-lg-12">
@@ -342,13 +289,12 @@ error_reporting(E_ALL);
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-primary"  name="salvar" type="submit">
+                            <button class="btn btn-primary" name="salvar" type="submit">
                                 <i class="glyphicon glyphicon-ok"></i>
                                 Salvar
                             </button>
                           </div>
-
-                        </form>
+                        </forlvar
                     </div>
                 </div>
             </div>
@@ -360,6 +306,7 @@ error_reporting(E_ALL);
     <script src="outros/startbootstrap-sb-admin-1.0.4/js/jquery.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="outros/startbootstrap-sb-admin-1.0.4/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>

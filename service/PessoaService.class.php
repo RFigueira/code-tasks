@@ -8,7 +8,7 @@ class PessoaService extends AbstractConnection {
     parent::__construct();
   }
 
-  public function save($pessoa) {
+public function save($pessoa) {
     $parametros =  array(':nome' => $pessoa->nome,
                          ':email' => $pessoa->email,
                          ':senha' => $pessoa->senha,
@@ -17,14 +17,13 @@ class PessoaService extends AbstractConnection {
 
     $sql = "INSERT INTO pessoa (nome, email, senha, perfil, ativo) ".
            " VALUES (:nome, :email, :senha, :perfil, :ativo)";
-    $retorno = $this->pdo->prepare($sql);
+    $retorno = $this->getPDO()->prepare($sql);
     $retorno->execute($parametros);
 
     return $retorno->rowCount();
   }
 
-  public function find($filtro=null,$orderBy=null) {
-
+public function find($filtro=null,$orderBy=null) {
       $parametros = array();
       $sql = "SELECT * FROM pessoa ";
       if(isset($filtro)) {
@@ -42,28 +41,57 @@ class PessoaService extends AbstractConnection {
          $lista[] = $obj;
       }
       return $lista;
-  }
+ }
 
-  public function findById($id) {
+public function findById($id) {
     $sql = "SELECT * FROM pessoa WHERE id=:id";
     $retorno = $this->getPDO()->prepare($sql);
     $retorno->bindParam(":id", $id);
     $retorno->execute();
-    if($obj = $retorno->fetchObject())
-    {
+    if($obj = $retorno->fetchObject()) {
         return $obj;
-    }
-    else
-    {
+    } else {
         return null;
     }
-
 }
 
+public function delete($id) {
+    $sql = "DELETE FROM pessoa WHERE id = :id";
+    $retorno = $this->getPDO()->prepare($sql);
+    $retorno->bindParam(":id", $id);
+    $retorno->execute();
+    return $retorno->rowCount();
 }
 
 
 
+public function update($pessoa) {
+  $parametros =  array(':id' => $pessoa->id,
+                       ':nome' => $pessoa->nome,
+                       ':email' => $pessoa->email,
+                       ':senha' => $pessoa->senha,
+                       ':perfil' => $pessoa->perfil,
+                       ':ativo' => $pessoa->ativo);
+
+    $sql = "UPDATE pessoa SET "
+            . "nome=:nome, "
+            . "email=:email, "
+            . "senha=:senha,"
+            . "perfil=:perfil,"
+            . "ativo=:ativo "
+            . "WHERE id=:id";
+    $retorno = $this->getPDO()->prepare($sql);
+    $retorno->execute($parametros);
+    return $retorno->rowCount();
+}
+
+public function salvar($pessoa) {
+  if($pessoa->id == null || $pessoa->id == 0) {
+    $this->save($pessoa);
+  } else {
+    $this->update($pessoa);
+  }
+}
 
 
- ?>
+}?>
