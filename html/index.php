@@ -23,6 +23,12 @@
     <!-- Meus estilos -->
     <link href="css/estilo.css" rel="stylesheet">
 
+    <!-- jQuery -->
+    <script src="outros/startbootstrap-sb-admin-1.0.4/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="outros/startbootstrap-sb-admin-1.0.4/js/bootstrap.min.js"></script>
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -87,7 +93,7 @@
                                 </a>
                                 <ul id="tarefas" class="collapse nav ml-30">
                                     <li>
-                                        <a href="#"><i class="glyphicon glyphicon-minus "></i> Tarefa 1</a>
+                                        <a href="manterTarefas.php"><i class="glyphicon glyphicon-minus "></i> Tarefa 1</a>
                                     </li>
                                     <li>
                                         <a href="#"><i class="glyphicon glyphicon-minus "></i> Tarefa 2</a>
@@ -100,49 +106,3 @@
             </div>
             <!-- /.navbar-collapse -->
         </nav>
-
-        <div id="page-wrapper">
-
-            <div class="container-fluid">
-
-                <!-- Page Heading -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <h1 class="page-header">
-                            Blank Page
-                            <small>Subheading</small>
-                        </h1>
-                        <ol class="breadcrumb">
-                            <li>
-                                <i class="fa fa-dashboard"></i>  <a href="index.php">Dashboard</a>
-                            </li>
-                            <li class="active">
-                                <i class="fa fa-file"></i> Blank Page
-                            </li>
-                        </ol>
-                    </div>
-
-                    <?php
-                    echo "This is PHP";
-                    ?>
-                </div>
-                <!-- /.row -->
-
-            </div>
-            <!-- /.container-fluid -->
-
-        </div>
-        <!-- /#page-wrapper -->
-
-    </div>
-    <!-- /#wrapper -->
-
-    <!-- jQuery -->
-    <script src="outros/startbootstrap-sb-admin-1.0.4/js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="outros/startbootstrap-sb-admin-1.0.4/js/bootstrap.min.js"></script>
-
-</body>
-
-</html>
