@@ -1,0 +1,79 @@
+CREATE TABLE projeto
+(
+  id serial NOT NULL,
+  titulo character varying(255),
+  descricao character varying(1000),
+  ativo boolean,
+  CONSTRAINT projeto_pkey PRIMARY KEY (id)
+)
+
+CREATE TABLE pessoa
+(
+  id serial NOT NULL, -- 
+  nome character varying(255),
+  senha character varying(20), -- 
+  email character varying(255),
+  ativo boolean,
+  perfil character varying(20),
+  CONSTRAINT pessoa_pkey PRIMARY KEY (id)
+)
+
+CREATE TABLE tarefa
+(
+  id serial NOT NULL,
+  id_projeto integer,
+  descricao character varying(500),
+  ativo boolean,
+  prazo timestamp without time zone,
+  CONSTRAINT tarefa_pkey PRIMARY KEY (id),
+  CONSTRAINT tarefa_id_projeto_fkey FOREIGN KEY (id_projeto)
+      REFERENCES projeto (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+
+CREATE TABLE projeto_pessoa
+(
+  id serial NOT NULL,
+  id_projeto integer,
+  id_pessoa integer,
+  url_hospedagem character varying(50),
+  url_github character varying(50),
+  CONSTRAINT projeto_pessoa_pkey PRIMARY KEY (id),
+  CONSTRAINT projeto_pessoa_id_pessoa_fkey FOREIGN KEY (id_pessoa)
+      REFERENCES pessoa (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT projeto_pessoa_id_projeto_fkey FOREIGN KEY (id_projeto)
+      REFERENCES projeto (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+
+CREATE TABLE projeto_pessoa_tarefa
+(
+  id serial NOT NULL,
+  id_projeto_pessoa integer,
+  id_tarefa integer,
+  data_entrega time without time zone,
+  CONSTRAINT projeto_pessoa_tarefa_pkey PRIMARY KEY (id),
+  CONSTRAINT projeto_pessoa_tarefa_id_projeto_pessoa_fkey FOREIGN KEY (id_projeto_pessoa)
+      REFERENCES projeto_pessoa (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT projeto_pessoa_tarefa_id_tarefa_fkey FOREIGN KEY (id_tarefa)
+      REFERENCES tarefa (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+
+CREATE TABLE comentario
+(
+  id serial NOT NULL,
+  id_projeto_pessoa_tarefa integer,
+  id_usuario integer,
+  comentario character varying(500),
+  data time without time zone,
+  CONSTRAINT comentario_pkey PRIMARY KEY (id),
+  CONSTRAINT comentario_id_projeto_pessoa_tarefa_fkey FOREIGN KEY (id_projeto_pessoa_tarefa)
+      REFERENCES projeto_pessoa_tarefa (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT comentario_id_usuario_fkey FOREIGN KEY (id_usuario)
+      REFERENCES pessoa (id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)

@@ -1,14 +1,13 @@
 <?php
 
 
-class Comentario
+class ProjetoPessoaTarefa 
 {
 
   private $id;
-  private $id_projeto_pessoa_tarefa;
-  private $id_usuario;
-  private $data;
-  private $Comentario;
+  private $id_projeto_pessoa;
+  private $id_tarefa;
+  private $data_entrega;
 
   public function __construct() { }
 

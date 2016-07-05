@@ -85,7 +85,7 @@
                         </a>
                         <ul id="projetos" class="collapse">
                             <li>
-                                <a href="manterProjetos.php"><i class="glyphicon glyphicon-plus"></i> Novo projeto</a>
+                                <a href="manterProjetos.php?id_projeto=3"><i class="glyphicon glyphicon-plus"></i> Novo projeto</a>
                             </li>
                             <li>
                                 <a href="javascript:;" data-toggle="collapse" data-target="#tarefas">

@@ -5,6 +5,7 @@ class Tarefa
 {
 
   private $id;
+  private $id_projeto;
   private $descricao;
   private $ativo;
   private $prazo;
