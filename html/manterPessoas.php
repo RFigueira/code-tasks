@@ -1,56 +1,53 @@
 <?php
-setlocale(LC_CTYPE, 'ptb', 'BR', 'pt_BR', 'Portuguese_Brazil.1252');
-date_default_timezone_set('America/Sao_Paulo');
-ini_set('default_charset', 'UTF-8');
-ini_set('display_errors', true);
-error_reporting(E_ERROR | E_WARNING);
-error_reporting(E_ALL);
-include 'index.php';
+    include 'index.php';
 
+    setlocale(LC_CTYPE, 'ptb', 'BR', 'pt_BR', 'Portuguese_Brazil.1252');
+    date_default_timezone_set('America/Sao_Paulo');
+    ini_set('default_charset', 'UTF-8');
+    ini_set('display_errors', true);
+    error_reporting(E_ERROR | E_WARNING);
+    error_reporting(E_ALL);
 
-  require_once '../service/PessoaService.class.php';
-  require_once '../model/Pessoa.class.php';
+    require_once '../service/PessoaService.class.php';
+    require_once '../model/Pessoa.class.php';
 
-//
+    $e='';
+    $msg = '';
+    $teste ='';
+    $pessoaService = new PessoaService;
+    $pessoa = new Pessoa();
+    if(isset($_GET["id"])) {
+        if(isset($_GET["nome"])) {
+            $pessoa = $pessoaService->findById($_GET["id"]);
+            $e = '$("#myModal").modal("show");';
 
-
-
-  $e='';
-  $msg = '';
-  $teste ='';
-  $pessoaService = new PessoaService;
-  $pessoa = new Pessoa();
-  if(isset($_GET["id"])) {
-    if(isset($_GET["nome"])) {
-      $pessoa = $pessoaService->findById($_GET["id"]);
-      $e = '$("#myModal").modal("show");';
-
+        }
+        else {
+            $pessoaService->delete($_GET["id"]);
+            //header("location: manterPessoas.php");
+        }
     }
     else {
-      $pessoaService->delete($_GET["id"]);
-      //header("location: manterPessoas.php");
+        if(isset($_POST["txt-nome"])  ||
+         isset($_POST["txt-senha"]) ||
+         isset($_POST["txt-email"]) ||
+         isset($_POST["txt-senha-confirmacao"])) {
+
+            $pessoa->id = $_POST["txt-id"];
+            $pessoa->nome = $_POST["txt-nome"];
+            $pessoa->senha = $_POST["txt-senha"];
+            $pessoa->email = $_POST["txt-email"];
+            $pessoa->perfil = 'ALUNO';
+            $pessoa->ativo = 't';
+
+            if($msg == null){
+              $pessoaService->salvar($pessoa);
+
+            }
+        }
     }
-  }
-  else {
-  if(isset($_POST["txt-nome"])  ||
-     isset($_POST["txt-senha"]) ||
-     isset($_POST["txt-email"]) ||
-     isset($_POST["txt-senha-confirmacao"])) {
-
-       $pessoa->id = $_POST["txt-id"];
-       $pessoa->nome = $_POST["txt-nome"];
-       $pessoa->senha = $_POST["txt-senha"];
-       $pessoa->email = $_POST["txt-email"];
-       $pessoa->perfil = 'ALUNO';
-       $pessoa->ativo = 't';
-
-    if($msg == null){
-      $pessoaService->salvar($pessoa);
-
-    }
-  }
-}
-  $pessoas = $pessoaService->find(null, null);
+    
+    $pessoas = $pessoaService->find(null, null);
 
 ?>
 

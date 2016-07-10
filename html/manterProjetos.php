@@ -10,11 +10,16 @@
 
     require_once '../service/ProjetoService.class.php';
     require_once '../model/Projeto.class.php';
+    require_once '../service/TarefaService.class.php';
+    require_once '../model/Tarefa.class.php';
 
     $msg = '';
     $id_projeto = 0;
     $projetoService = new ProjetoService;
-    $projeto = new Projeto();
+    $projeto = new Projeto;
+    $tarefaService = new TarefaService;
+    $tarefa = new Tarefa;
+    $tarefas = array();
 
     function get_post_action($name)
     {
@@ -25,6 +30,16 @@
                 return $name;
             }
         }
+    }
+
+    if(isset($_GET["id_projeto"])) 
+    {
+        $id_projeto = $_GET["id_projeto"];
+    }
+
+    if(isset($_GET["id_tarefa"])) 
+    {
+        $tarefaService->delete($_GET["id_tarefa"]);
     }
 
     switch (get_post_action('salvar', 'inserir_pessoas', 'inserir_tarefas')) 
@@ -57,28 +72,51 @@
             break;
 
         case 'inserir_tarefas':
-            //publish article and redirect
+            if(isset($_GET["id_tarefa"]))
+            {
+                $tarefa->id = $_GET["id_tarefa"];
+            }
+
+            if(isset($_POST["txt-idh"]))
+            {
+                $tarefa->id_projeto = $_POST["txt-idh"];
+            }
+
+            if(isset($_POST["txt-descricao-tarefa"]))
+            {
+                $tarefa->descricao = $_POST["txt-descricao-tarefa"];
+            }
+
+            $data = '';
+            $hora = '';
+            if(isset($_POST["txt-prazo"])) 
+            {               
+               $data = $_POST["txt-prazo"];              
+            }
+
+            if(isset($_POST["txt-hora-limite"]))
+            {
+               $hora = $_POST["txt-hora-limite"];
+            }
+
+            $tarefa->prazo = $data.' '.$hora;
+            $tarefa->ativo = 't';
+            $tarefaService->salvar($tarefa);
             break;
 
         default:
         //no action sent
     }
 
-    if(isset($_GET["id_projeto"])) {
-        $id_projeto = $_GET["id_projeto"];
+    if($id_projeto > 0) 
+    {
         $projeto = $projetoService->findById($id_projeto);
+        $tarefas = $tarefaService->findByIdProjeto($id_projeto);
     }
 ?>
 
-<script>
-function changeVisible(divid) {
-    var div = document.getElementById(divid);
-    var disp = div.style.display;
-    div.style.display = disp == 'none' ? 'block' : 'none';
-}
-</script>
         <div id="page-wrapper">
-            <form action="manterProjetos.php" method="post">
+            <form action="manterProjetos.php?id_projeto=<?php echo $id_projeto?>" method="post">
             <div class="container-fluid">
                 <!-- Page Heading -->
                 <div class="row">
@@ -93,7 +131,8 @@ function changeVisible(divid) {
                         <div class="col-lg-1">
                             <label>Código</label>
                             <div class="form-group">                                          
-                                <input type="text" class="form-control" disabled="true" name="txt-id" value="<?php echo $projeto->id?>">                                      
+                                <input type="hidden" class="form-control"  name="txt-idh" value="<?php echo $projeto->id?>">    
+                                 <input type="text" class="form-control" disabled="true" name="txt-id" value="<?php echo $projeto->id?>">                                      
                             </div>
                         </div>
                         <div class="col-lg-7">
@@ -122,7 +161,7 @@ function changeVisible(divid) {
                             <div class="col-lg-12">
                                 <label>Descrição da tarefa</label>
                                 <div class="form-group">                                          
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="txt-descricao-tarefa">
                                 </div>
                             </div>                         
                         </div>
@@ -130,15 +169,15 @@ function changeVisible(divid) {
                             <div class="col-lg-12">
                                 <div class="half">
                                     <div class="mw-100">
-                                        <label>Data</label>
+                                        <label>Prazo</label>
                                         <div class="form-group">               
-                                            <input type="text" class="form-control">         
+                                            <input type="text" class="form-control" name="txt-prazo" pattern="[0-9]{2}\/[0-9]{2}\/[0-9]{4}$" maxlength="10">         
                                         </div>
                                     </div>  
                                     <div class="mw-80">
-                                        <label>Hora</label>
+                                        <label>às</label>
                                         <div class="form-group">               
-                                            <input type="text" class="form-control">                
+                                            <input type="text" class="form-control" name="txt-hora-limite" pattern="[0-9]{2}:[0-9]{2}$"  maxlength="5">                
                                         </div>
                                     </div>
                                 </div>
@@ -160,53 +199,26 @@ function changeVisible(divid) {
                                                     <tr>
                                                         <th>#</th>
                                                         <th>Descrição</th>
+                                                        <th>Prazo</th>
                                                         <th>Ativo</th>
                                                         <th ></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    <?php foreach ($tarefas as $obj) { ?>
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>Tarefa 1</td>
+                                                        <td><?php echo $obj->id?></td>
+                                                        <td><?php echo $obj->descricao?></td>
+                                                        <td><?php echo $obj->prazo?></td>
+                                                        <td><?php echo $obj->ativo == 'TRUE' ? 'SIM' : 'NÃO'?></td>
                                                         <td>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input value="" type="checkbox">
-                                                                </label>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-danger pull-right"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
+                                                            <a href="manterProjetos.php?id_projeto=<?php echo $id_projeto?>?id_tarefa=<?php echo $obj->id?>" type="button" class="btn btn-danger">
+                                                                <i class="glyphicon glyphicon-trash"></i> 
+                                                                Excluir
+                                                            </a>
                                                         </td>
                                                     </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Tarefa 2</td>
-                                                        <td>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input value="" type="checkbox">
-                                                                </label>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-danger pull-right"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>Tainã Milano</td>
-                                                        <td>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input value="" type="checkbox">
-                                                                </label>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <button type="button" class="btn btn-danger pull-right"><i class="glyphicon glyphicon-trash"></i> Excluir</button>
-                                                        </td>
-                                                    </tr>
+                                                    <?php } ?>
                                                 </tbody>
                                             </table>
                                         </div>
