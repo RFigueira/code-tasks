@@ -5,7 +5,7 @@ CREATE TABLE projeto
   descricao character varying(1000),
   ativo boolean,
   CONSTRAINT projeto_pkey PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE pessoa
 (
@@ -16,7 +16,7 @@ CREATE TABLE pessoa
   ativo boolean,
   perfil character varying(20),
   CONSTRAINT pessoa_pkey PRIMARY KEY (id)
-)
+);
 
 CREATE TABLE tarefa
 (
@@ -29,7 +29,7 @@ CREATE TABLE tarefa
   CONSTRAINT tarefa_id_projeto_fkey FOREIGN KEY (id_projeto)
       REFERENCES projeto (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
+);
 
 CREATE TABLE projeto_pessoa
 (
@@ -45,7 +45,7 @@ CREATE TABLE projeto_pessoa
   CONSTRAINT projeto_pessoa_id_projeto_fkey FOREIGN KEY (id_projeto)
       REFERENCES projeto (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
+);
 
 CREATE TABLE projeto_pessoa_tarefa
 (
@@ -60,7 +60,7 @@ CREATE TABLE projeto_pessoa_tarefa
   CONSTRAINT projeto_pessoa_tarefa_id_tarefa_fkey FOREIGN KEY (id_tarefa)
       REFERENCES tarefa (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
+);
 
 CREATE TABLE comentario
 (
@@ -76,4 +76,74 @@ CREATE TABLE comentario
   CONSTRAINT comentario_id_usuario_fkey FOREIGN KEY (id_usuario)
       REFERENCES pessoa (id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
+);
+
+--CRIAÇÃO DAS TRIGGERS
+
+--1.Quando inserir uma pessoa no projeto, deve realizar a ligação da mesma com todas as tarefas daquele projeto
+CREATE FUNCTION insere_pessoa_tarefa() RETURNS trigger AS $$
+  DECLARE 
+  cur_tarefas tarefa%ROWTYPE; --cursor
+  
+  BEGIN
+    FOR cur_tarefas in SELECT t.id FROM tarefa t WHERE t.id_projeto = NEW.id_projeto
+    LOOP
+      INSERT INTO projeto_pessoa_tarefa (id_projeto_pessoa, id_tarefa) VALUES (NEW.id, cur_tarefas.id);
+      
+      -- NEXT tarefas;
+      
+    END LOOP;
+    
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+  
+
+CREATE TRIGGER tg_insere_pessoa_tarefa  
+  AFTER INSERT ON projeto_pessoa FOR EACH ROW
+  EXECUTE PROCEDURE insere_pessoa_tarefa();
+
+--2.Quando excluir uma pessoa do projeto, deve realizar a exclusão da ligação da mesma com todas tarefas daquele projeto
+CREATE FUNCTION exclui_pessoa_tarefa() RETURNS trigger AS $$  
+  BEGIN
+    DELETE FROM projeto_pessoa_tarefa WHERE id_projeto_pessoa = OLD.id;
+    RETURN OLD;
+  END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER tg_delete_pessoa_tarefa  
+  BEFORE DELETE ON projeto_pessoa FOR EACH ROW
+  EXECUTE PROCEDURE exclui_pessoa_tarefa();
+
+--3.Quando inserir uma tarefa no projeto, a mesma deve ser associada a todas as pessoas daquele projeto 
+CREATE FUNCTION insere_tarefa_pessoa() RETURNS trigger AS $$
+  DECLARE 
+  cur_pessoas projeto_pessoa%ROWTYPE; --cursor
+  
+  BEGIN
+    FOR cur_pessoas in SELECT pp.id FROM projeto_pessoa pp WHERE pp.id_projeto = NEW.id_projeto
+    LOOP
+      INSERT INTO projeto_pessoa_tarefa (id_projeto_pessoa, id_tarefa) VALUES (cur_pessoas.id, NEW.id);      
+    END LOOP;
+    
+    RETURN NEW;
+  END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tg_insere_tarefa_pessoa
+  AFTER INSERT ON tarefa FOR EACH ROW
+  EXECUTE PROCEDURE insere_tarefa_pessoa();
+
+--4.Quando excluir uma tarefa do projeto, deve realizar a exclusão da ligação da mesma com todas pessoas daquele projeto
+CREATE FUNCTION exclui_tarefa_pessoa() RETURNS trigger AS $$  
+  BEGIN
+    DELETE FROM projeto_pessoa_tarefa WHERE id_tarefa = OLD.id;
+    RETURN OLD;
+  END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER tg_exclui_tarefa_pessoa
+  BEFORE DELETE ON tarefa FOR EACH ROW
+  EXECUTE PROCEDURE exclui_tarefa_pessoa();
