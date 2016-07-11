@@ -1,6 +1,6 @@
 <?php
 
-//require 'AbstractConnection.class.php';
+//require_once 'AbstractConnection.class.php';
 
 class TarefaService extends AbstractConnection 
 {

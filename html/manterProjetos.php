@@ -9,17 +9,25 @@
     error_reporting(E_ALL);
 
     require_once '../service/ProjetoService.class.php';
-    require_once '../model/Projeto.class.php';
     require_once '../service/TarefaService.class.php';
+    require_once '../service/PessoaService.class.php';
+    require_once '../service/ProjetoPessoaService.class.php';
+    require_once '../model/Projeto.class.php';
+    require_once '../model/ProjetoPessoa.class.php';
     require_once '../model/Tarefa.class.php';
 
     $msg = '';
     $id_projeto = 0;
     $projetoService = new ProjetoService;
-    $projeto = new Projeto;
     $tarefaService = new TarefaService;
+    $pessoaService = new PessoaService;
+    $projeto_pessoaService = new ProjetoPessoaService;
+    $projeto = new Projeto;
     $tarefa = new Tarefa;
+    $projeto_pessoa = new ProjetoPessoa;
     $tarefas = array();
+    $pessoas = array();
+    $projeto_pessoas = array();
 
     function get_post_action($name)
     {
@@ -40,6 +48,11 @@
     if(isset($_GET["id_tarefa"])) 
     {
         $tarefaService->delete($_GET["id_tarefa"]);
+    }
+
+    if(isset($_GET["id_projeto_pessoa"])) 
+    {
+        $projeto_pessoaService->delete($_GET["id_projeto_pessoa"]);
     }
 
     switch (get_post_action('salvar', 'inserir_pessoas', 'inserir_tarefas')) 
@@ -68,7 +81,12 @@
             break;
 
         case 'inserir_pessoas':
-            //save article and redirect
+            if(isset($_POST["drpPessoas"]))
+            {
+                $projeto_pessoa->id_pessoa = $_POST["drpPessoas"];
+            }
+            $projeto_pessoa->id_projeto = $id_projeto;
+            $projeto_pessoaService->save($projeto_pessoa);
             break;
 
         case 'inserir_tarefas':
@@ -112,6 +130,8 @@
     {
         $projeto = $projetoService->findById($id_projeto);
         $tarefas = $tarefaService->findByIdProjeto($id_projeto);
+        $pessoas = $pessoaService->find(null,'nome asc');
+        $projeto_pessoas = $projeto_pessoaService->findByIdProjeto($id_projeto);
     }
 ?>
 
@@ -212,9 +232,11 @@
                                                         <td><?php echo $obj->prazo?></td>
                                                         <td><?php echo $obj->ativo == 'TRUE' ? 'SIM' : 'NÃO'?></td>
                                                         <td>
-                                                            <a href="manterProjetos.php?id_projeto=<?php echo $id_projeto?>?id_tarefa=<?php echo $obj->id?>" type="button" class="btn btn-danger">
-                                                                <i class="glyphicon glyphicon-trash"></i> 
-                                                                Excluir
+                                                            <a href="manterProjetos.php?id_projeto=<?php echo $id_projeto?>&id_tarefa=<?php echo $obj->id?>" type="button" class="btn btn-danger" title="Excluir">
+                                                                <i class="glyphicon glyphicon-trash"></i>                                                                 
+                                                            </a>
+                                                            <a href="manterTarefas.php?id_tarefa=<?php echo $obj->id?>" type="button" class="btn btn-success" title="Gerenciar tarefas">
+                                                                <i class="glyphicon glyphicon-edit"></i>                                                                 
                                                             </a>
                                                         </td>
                                                     </tr>
@@ -233,28 +255,24 @@
                         <div class="row">
                             <div class="col-lg-9">
                                 <label>Pessoas</label>
-                                <div class="form-group">                                          
-                                    <input type="text" class="form-control">
+                                <div class="form-group">       
+                                    <select class="form-control" name="drpPessoas">
+                                    <?php foreach ($pessoas as $obj) { ?>
+                                        <option value="<?php echo $obj->id?>"><?php echo $obj->nome?></option>
+                                    <?php } ?>
+                                    </select>                                   
+                                    <!--<input type="text" class="form-control">-->
                                 </div> 
                             </div>              
                             <div class="col-lg-3">
-                                <button type="button" class="btn btn-primary" name="inserir_pessoas" ><i class="glyphicon glyphicon-ok"></i> Inserir</button>
+                                <button type="submit" class="btn btn-primary" name="inserir_pessoas" ><i class="glyphicon glyphicon-ok"></i> Inserir</button>
                             </div>                            
                         </div> 
                         <div class="row">
                             <div class="col-lg-12">
-                                <span class="label label-primary">Tainã Milano</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Rodrigo Freitas</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Patric Dutra</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Marcelo Siedler</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Tainã Milano</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Rodrigo Freitas</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Patric Dutra</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Marcelo Siedler</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Tainã Milano</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Rodrigo Freitas</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Patric Dutra</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
-                                <span class="label label-primary">Marcelo Siedler</span><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span>
+                                <?php foreach ($projeto_pessoas as $obj) { ?>
+                                        <span class="label label-primary"><?php echo $obj->nome?></span><a href="manterProjetos.php?id_projeto=<?php echo $id_projeto?>&id_projeto_pessoa=<?php echo $obj->id?>"><span class="label label-danger"><i class="glyphicon glyphicon-remove"></i></span></a>
+                                <?php } ?>                                
                             </div>                            
                         </div>                  
                     </div>
@@ -262,11 +280,11 @@
                 <?php  } ?>
                 <div class="row ">
                     <div class="col-lg-12 mt-15">
-                    <?php if($id_projeto > 0) {?>
-                        <div class="pull-left">
+                     <!--<?php if($id_projeto > 0) {?>
+                       <div class="pull-left">
                             <button type="button" class="btn btn-success"><i class="glyphicon glyphicon-edit"></i> Gerenciar tarefas</button>
                         </div>
-                        <?php  } ?>
+                        <?php  } ?>-->
                         <div class="pull-right">
                         <?php if($id_projeto > 0) {?>
                             <button type="button" class="btn btn-danger"><i class="glyphicon glyphicon-ban-circle"></i> Cancelar</button><?php  } ?>

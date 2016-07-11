@@ -9,6 +9,9 @@ class ProjetoPessoa
   private $id_pessoa;
   private $url_hospedagem;
   private $url_github;
+
+  //Propriedade(s) de junção(ões)
+  private $nome;
   
   public function __construct() { }
 
